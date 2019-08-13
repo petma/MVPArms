@@ -15,17 +15,21 @@
  */
 package me.jessyan.mvparms.demo.mvp.ui.adapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
-import com.jess.arms.base.BaseHolder;
-import com.jess.arms.base.DefaultAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.User;
-import me.jessyan.mvparms.demo.mvp.ui.holder.UserItemHolder;
+
 
 /**
  * ================================================
@@ -36,20 +40,31 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.UserItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserAdapter extends DefaultAdapter<User> {
+public class UserAdapter extends BaseQuickAdapter<User, BaseViewHolder> {
 
-    public UserAdapter(List<User> infos) {
-        super(infos);
+    ImageLoader mImageLoader;
+    /**
+     * 用于加载图片的管理类, 默认使用 Glide, 使用策略模式, 可替换框架
+     */
+
+    public UserAdapter(List<User> infos,ImageLoader mImageLoader) {
+        super(R.layout.recycle_list,infos);
+
+        //可以在任何可以拿到 Context 的地方, 拿到 AppComponent, 从而得到用 Dagger 管理的单例对象
+  /*      mAppComponent = ArmsUtils.obtainAppComponentFromContext(mContext);
+        mImageLoader = mAppComponent.imageLoader();*/
+        this.mImageLoader=mImageLoader;
     }
 
-    @NonNull
     @Override
-    public BaseHolder<User> getHolder(@NonNull View v, int viewType) {
-        return new UserItemHolder(v);
+    protected void convert(BaseViewHolder helper, User item) {
+        helper.setText(R.id.tv_name,item.getLogin());
+        mImageLoader.loadImage(mContext,
+                ImageConfigImpl
+                        .builder()
+                        .url(item.getAvatarUrl())
+                        .imageView(helper.getView(R.id.iv_avatar))
+                        .build());
     }
 
-    @Override
-    public int getLayoutId(int viewType) {
-        return R.layout.recycle_list;
-    }
 }

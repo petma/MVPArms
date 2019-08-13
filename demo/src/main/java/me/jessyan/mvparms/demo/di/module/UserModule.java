@@ -15,11 +15,12 @@
  */
 package me.jessyan.mvparms.demo.di.module;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public abstract class UserModule {
 
     @ActivityScope
     @Provides
-    static RecyclerView.Adapter provideUserAdapter(List<User> list){
-        return new UserAdapter(list);
+    static RecyclerView.Adapter provideUserAdapter(List<User> list, ImageLoader mImageLoader){
+        return new UserAdapter(list,mImageLoader);
     }
 }

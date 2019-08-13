@@ -21,11 +21,8 @@ android {
 }
 
 dependencies {
-    api(rootProject.ext.dependencies["glide"]) {
-        exclude module: 'support-annotations'
-        exclude module: 'support-fragment'
-    }
-    compileOnly project(':arms')
+
+    api project(':arms')
 }
 
 apply from: '../bintray.gradle'
